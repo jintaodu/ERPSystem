@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/javascript; charset=UTF-8">
+<title>无标题文档</title>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+
+<script src="js/jquery-1.11.3.min.js"></script>
+
+<style>
+	*{font-family:"微软雅黑"}
+</style>
+
+
+</head>
+
+<body leftmargin="0" topmargin="0">
+<nav class="navbar navbar-default" role="navigation">
+<ul class="nav nav-pills nav-stacked">
+  <li style="font-size:28px;background-color:#CCEEFF;height:50px;padding-left:15px;">人事管理</li>
+  <li role="presentation"><a href="hr/employeebrowing.jsp" target="mainFrame">查看员工状态</a></li>
+  <li role="presentation"><a href="hr/employeecheckin.jsp" target="mainFrame">员工入职登记</a></li>
+  <li role="presentation"><a href="hr/employeecheckout.jsp" target="mainFrame">员工离职登记</a></li>
+  <li role="presentation"><a href="hr/employeesalary.jsp" target="mainFrame">员工薪资发放</a></li>
+</ul>
+
+<ul class="nav nav-pills nav-stacked">
+<li style="font-size:28px;background-color:#CCEEFF;height:50px;padding-left:15px;">仓库管理</li>
+ <!--  <li role="presentation"><a href="">仓库管理</a></li> -->
+  <li role="presentation"><a href="warehouse/productbrowing.jsp" target="mainFrame">查看仓库状态</a></li>
+  <li role="presentation"><a href="warehouse/productcheckin.jsp" target="mainFrame">货物入库登记</a></li>
+  <li role="presentation"><a href="warehouse/productcheckout.jsp" target="mainFrame">货物出库登记</a></li>
+</ul>
+
+<ul class="nav nav-pills nav-stacked">
+<li style="font-size:28px;background-color:#CCEEFF;height:50px;padding-left:15px;">账户管理</li>
+  <!-- <li role="presentation"><a href="">账户管理</a></li> -->
+  <li role="presentation"><a href="amend_password.html" target="mainFrame">修改登陆密码</a></li>
+  <li role="presentation"><a href="logout.jsp" target="mainFrame">退出管理系统</a></li>
+</ul>
+
+</nav>
+
+
+
+</body>
+
+<script type="text/javascript">
+	$("ul li").click(function(e){
+		//alert("click");
+		$("ul li.active").removeClass("active");
+		$(this).addClass("active");
+		
+	});
+
+</script>
+
+</html>
