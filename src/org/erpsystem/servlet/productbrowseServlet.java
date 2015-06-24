@@ -1,6 +1,7 @@
 package org.erpsystem.servlet;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,6 +37,16 @@ public class productbrowseServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    private String parameterTranscoding(String parameter){
+		try {
+			return new String(parameter.getBytes("iso-8859-1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
@@ -43,10 +54,10 @@ public class productbrowseServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		
-		String browsetype = request.getParameter("browsetype");
+		String browsetype      = request.getParameter("browsetype");
 		
-		Connection connection = Dao.connect();
-		Statement statement = null;
+		Connection connection  = Dao.connect();
+		Statement statement    = null;
 		
 		try{
 			connection.setAutoCommit(true);//保证从链接池中取到的connection是自动提交事务
@@ -64,7 +75,7 @@ public class productbrowseServlet extends HttpServlet {
 			System.out.println("查询仓库库存信息sql"+sql);
 			resultSet =  statement.executeQuery(sql);
 			
-			if(browsetype.equals("table")){
+			if(browsetype.equals("statustable")){
 				
 				JSONArray jsonarray = new JSONArray();
 				
@@ -76,7 +87,7 @@ public class productbrowseServlet extends HttpServlet {
 					jsonarray.add(arr);
 				}
 				resultSet.close();
-				System.out.println("仓库库存信息"+jsonarray.toJSONString() );
+				System.out.println("仓库库存信息："+jsonarray.toJSONString() );
 				response.getWriter().write( jsonarray.toJSONString() );
 				
 			}else if(browsetype.equals("all")){
@@ -92,6 +103,39 @@ public class productbrowseServlet extends HttpServlet {
 				resultSet.close();
 				System.out.println("仓库库存信息"+jsonarray.toJSONString() );
 				response.getWriter().write( jsonarray.toJSONString() );
+			
+			}else if(browsetype.equals("historytable")){
+				
+				String productname     = parameterTranscoding(request.getParameter("productname"));
+				String producttype     = parameterTranscoding(request.getParameter("producttype"));
+				String productlocation = parameterTranscoding(request.getParameter("productlocation"));
+				
+				sql = "desc product_transaction;";
+				resultSet =  statement.executeQuery(sql);
+				
+				ArrayList<String> product_transaction_cols = new ArrayList<String>();
+				while(resultSet.next()){
+					product_transaction_cols.add(resultSet.getString(1));
+				}
+				
+				sql = "select * from product_transaction where productname='"+productname+"' and producttype ='"
+					  +producttype+"' and productlocation='"+productlocation+"';";
+				System.out.println("查询仓库历史信息sql："+sql);
+				resultSet =  statement.executeQuery(sql);
+				
+				JSONArray jsonarray = new JSONArray();
+				while(resultSet.next()){
+					JSONArray arr = new JSONArray();
+					for(int i = 0; i < product_transaction_cols.size(); ++i){
+						arr.add(resultSet.getString(i+1));
+					}
+					jsonarray.add(arr);
+				}
+				
+				resultSet.close();
+				System.out.println("仓库库存信息："+jsonarray.toJSONString() );
+				response.getWriter().write( jsonarray.toJSONString() );
+				
 			}
 			
 		}catch(SQLException e){

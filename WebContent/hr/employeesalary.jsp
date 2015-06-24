@@ -27,13 +27,13 @@
 		<form name="salaryform" method=POST >
 		   	<div class="input-group input-group-lg col-md-6">
 			  <span class="input-group-addon" id="sizing-addon1">员工姓名</span>
-			  <select id="employeenamepicker" name="employeeName" data-live-search="true" class="form-control col-md-4" style="display: none;"></select>
+			  <select id="employeenamepicker" name="employeename" data-live-search="true" class="form-control col-md-4" style="display: none;"></select>
 			</div>
 		
 			<br>
 			<div class="input-group input-group-lg col-md-6">
 			  <span class="input-group-addon" id="sizing-addon1">身份证号</span>
-			  <label type="text" class="form-control  col-md-4" id="employeeidno" name="employeeidno"></label> 
+			  <input type="text" class="form-control  col-md-4" id="employeeidno" name="employeeidno" onfocus=this.blur()></input> 
 			</div>
 			
 			<br>
@@ -60,41 +60,6 @@
 		</form>
 	
 	</div>
-	
-	
-<!-- 	
-	<form name = "salaryform" method=post>
-		<br>
-		<table width="40%" border="1" cellspacing="0" bordercolor="#CCCCFF" class="table">
-			
-			<tr>
-				<td>员工名：（*）</td>
-				<td id="employeenamepicker">
-				</td>
-			</tr>
-			<tr>
-			    <td>身份证号:</td>
-				<td><input type="text" name="employeeidno" value=""></input></td>
-			</tr>
-			<tr>
-			    <td>工资（日薪）:</td>
-				<td><input type="text" name="salary"/></td>
-			</tr>
-			<tr>
-			    <td>上次发放日期:</td>
-				<td><input type="text" name="salarylastdate"/></td>
-			</tr>
-			<tr>
-			    <td>本次应该发放数额:</td>
-				<td><input type="text" name="salaryamount"/></td>
-			</tr>
-			<tr><td><b>* 表示必填项</b></td>
-			</tr>
-		</table>
-		<br> <br>
-
-		<button name="submit1" id="submit1" type="submit">提交</button>
-	</form> -->
 		
 </body>
   
@@ -130,7 +95,7 @@ $(function() {
 			
 			$('select#employeenamepicker').selectpicker();
 			
-			var selectedname = $("select[name=employeeName]").val();
+			var selectedname = $("select[name=employeename]").val();
 			var selectedidno = $("select#employeenamepicker").find("option:selected").attr("idno");
 			var idnos = "";
 			var checkindate="";
@@ -146,7 +111,7 @@ $(function() {
 				}
 			}
 			console.log(salarylastdate);
-			$("form[name=salaryform] label[name=employeeidno]").text(idnos);
+			$("form[name=salaryform] input[name=employeeidno]").val(idnos);
 			$("form[name=salaryform] input[name=checkindate]").val(checkindate);
 			$("form[name=salaryform] input[name=salary]").val(salary);
 
@@ -159,8 +124,8 @@ $(function() {
 	});
 	
 	//员工名下拉列表改变事件
-	$('select[name=employeeName]').change(function(){
-		var selectedname = $("select[name=employeeName]").val();
+	$('select[name=employeename]').change(function(){
+		var selectedname = $("select[name=employeename]").val();
 		var selectedidno = $("select#employeenamepicker").find("option:selected").attr("idno");
 		
 		var idnos = "";
@@ -178,7 +143,7 @@ $(function() {
 			}
 		}
 		console.log(salarylastdate);
-		$("form[name=salaryform] label[name=employeeidno]").text(idnos);
+		$("form[name=salaryform] input[name=employeeidno]").val(idnos);
 		$("form[name=salaryform] input[name=checkindate]").val(checkindate);
 		$("form[name=salaryform] input[name=salary]").val(salary);
 		if(null == salarylastdate || salarylastdate.length == 0){

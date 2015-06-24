@@ -31,43 +31,39 @@
 			  <span class="input-group-addon" id="sizing-addon1">身份证号：</span>
 			  <input type="text" class="form-control  col-md-4" id="employeeidno"></input> 
 			</div>
-			
-			<!-- <br>
-			<input type="hidden" name="browsetype" value="all"></input>
-			<button name="submit1" id="submit1" type="submit" class="btn btn-primary">查询</button> -->
 		</form>
 		
-	<div class="page-header"><h4>员工基本状态</h4></div>
+		<div class="page-header"><h4>员工基本状态</h4></div>
 	
-	<div class="col-md-12" id="summary">
-    <table border=1 class="table table-hover">
-       <tr >
-       	<td width="200px"><b>用户名</b></td>
-       	<td width="200px"><b>是否在职</b></td>
-       	<td width="200px"><b>工资</b></td>
-       	<td width="200px"><b>入职时间</b></td>
-       	<td width="200px"><b>离职时间</b></td>
-       	<td width="200px"><b>工资发放至</b></td>
-       </tr>
-       <tr id="result"></tr>
-    </table>
-    </div>
+		<div class="col-md-12" id="summary">
+		    <table border=1 class="table table-hover">
+		       <tr >
+		       	<td width="200px"><b>用户名</b></td>
+		       	<td width="200px"><b>是否在职</b></td>
+		       	<td width="200px"><b>工资</b></td>
+		       	<td width="200px"><b>入职时间</b></td>
+		       	<td width="200px"><b>离职时间</b></td>
+		       	<td width="200px"><b>工资发放至</b></td>
+		       </tr>
+		       <tr id="result"></tr>
+		    </table>
+	    </div>
     
-    <div class="page-header"><h4>员工历史记录</h4></div>
+    	<div class="page-header"><h4>员工历史记录</h4></div>
     
-    <div class="col-md-12">
-        <table id="historytable" class="datatable display">
-    	<thead>
-               <tr>
-                   <th>身份证号</th>
-                   <th>用户名</th>
-                   <th>操作类型</th>
-                   <th>时间</th>
-                   <th>操作详情</th>
-               </tr>
-         </thead>
-         </table>
-    </div>
+	    <div class="col-md-12">
+	        <table id="historytable" class="datatable display">
+	    	<thead>
+	               <tr>
+	                   <th>身份证号</th>
+	                   <th>用户名</th>
+	                   <th>操作类型</th>
+	                   <th>时间</th>
+	                   <th>操作详情</th>
+	               </tr>
+	         </thead>
+	         </table>
+	    </div>
     
     
 	</div>
@@ -79,6 +75,7 @@
   <script type="text/javascript">
   
   var table = $('#historytable').DataTable({
+	  "aLengthMenu": [5, 10, 20, 50, 100],
 	  "oLanguage": {//汉化
           "sLengthMenu": "每页显示 _MENU_ 条记录",
           "sZeroRecords": "没有检索到数据",
@@ -97,7 +94,7 @@
   });
   
   
-  function historyinfo_render(idno)
+  function employee_history_info_render(idno)
   {//根据身份证号获取历史信息,并进行渲染
 	  $.ajax({
 		  url: "/ERPSystem/hr/employeebrowseServlet",
@@ -139,24 +136,27 @@
 			success:function(json){
 				
 				employeeinfo = json;
-				//var selecthtml = "<select name=\"employeeName\" style=\"width:200px;\">";
+				
 				var selecthtml = "";
 				for(var index in employeeinfo){
-					selecthtml += "<option value="+employeeinfo[index].employeename+">"+employeeinfo[index].employeename+"</option>";
+					selecthtml += "<option value="+employeeinfo[index].employeename+" idno="+employeeinfo[index].idno+">"
+					+employeeinfo[index].employeename+"(身份证号："+employeeinfo[index].idno+")</option>";
 				}
-				//selecthtml += "</select>";
+				
 				$("select#employeenamepicker").html(selecthtml);
 				
 				$('#employeenamepicker').selectpicker();
 				
 				var selectedname = $("select#employeenamepicker").val();
+				var selectedidno = $("select#employeenamepicker").find("option:selected").attr("idno"); 
+				
 				var idnos = "", onsite = "", salary = "";
 				var checkindate = "", checkoutdate = "", salarylastdate="";
 				var prefix = "<td width=\"200px\">"
 				var result = "";
 				
 				for(var index in employeeinfo){
-					if(employeeinfo[index].employeename == selectedname){
+					if(employeeinfo[index].employeename == selectedname && employeeinfo[index].idno == selectedidno){
 						idnos          = index;
 						salary         =  employeeinfo[index].salary;
 						checkindate    =  employeeinfo[index].checkindate;
@@ -182,22 +182,24 @@
 				$("form[name=employeebrowsing] input#employeeidno").val(idnos);
 				$("div#summary tr#result").html(result);
 				
-				historyinfo_render(idnos);
+				employee_history_info_render(idnos);
 	
 			}
 		});
 		
 		//员工名下拉列表改变事件
 		$('select#employeenamepicker').change(function(){
+			
 			var selectedname = $("select#employeenamepicker").val();
-
+			var selectedidno = $("select#employeenamepicker").find("option:selected").attr("idno"); 
+			
 			var idnos = "", onsite = "", salary = "";
 			var checkindate = "", checkoutdate = "", salarylastdate="";
 			var prefix = "<td width=\"200px\">"
 			var result = "";
 			
 			for(var index in employeeinfo){
-				if(employeeinfo[index].employeename == selectedname){
+				if(employeeinfo[index].employeename == selectedname && employeeinfo[index].idno == selectedidno){
 					idnos          = index;
 					salary         =  employeeinfo[index].salary;
 					checkindate    =  employeeinfo[index].checkindate;
@@ -222,7 +224,7 @@
 			}
 			$("form[name=employeebrowsing] input#employeeidno").val(idnos);
 			$("div#summary tr#result").html(result);
-			historyinfo_render(idnos);
+			employee_history_info_render(idnos);
 		});
 		
   });

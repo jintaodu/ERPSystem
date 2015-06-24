@@ -23,30 +23,6 @@
    </div>
    
    <div class="col-md-12">
-<!-- 		<div class="page-header"><h4>新员工入职</h4></div>
-		
-		<form name="checkinform" method=POST >
-		   	<div class="input-group input-group-lg col-md-6">
-			  <span class="input-group-addon" id="sizing-addon1">新员工姓名</span>
-			  <input type="text" id="employeeName" class="form-control col-md-4" name="employeeName"></input>
-			</div>
-		
-			<br>
-			<div class="input-group input-group-lg col-md-6">
-			  <span class="input-group-addon" id="sizing-addon1">身份证号</span>
-			  <input type="text" class="form-control  col-md-4" id="employeeidno" name="employeeidno"></input> 
-			</div>
-			
-			<br>
-			<div class="input-group input-group-lg col-md-6">
-			  <span class="input-group-addon" id="sizing-addon1">工资（日薪）</span>
-			  <input type="text" class="form-control  col-md-4" id="salary" name="salary"></input> 
-			</div>
-			
-			<br>
-			<input type="hidden" name="checktype" value="checkin"></input>
-			<button name="submit1" id="submit1" type="submit" class="btn btn-primary">提交</button>
-		</form> -->
 		
 		<div class="page-header"><h4>老员工离职</h4></div>
 	

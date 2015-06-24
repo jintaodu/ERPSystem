@@ -167,25 +167,6 @@ $(function() {
 				    source: productlocations
 				});
 				
-				
-				//以下完成check out form的动作
-				/* var selecthtml = "";
-				var productnamearray = new Array();
-				for(var index in productinfo){
-					if( productnamearray.indexOf(productinfo[index].productname)==-1 ){
-						productnamearray.push(productinfo[index].productname);	
-					}
-				}
-				for(var index in productnamearray ){
-					selecthtml += "<option value="+productnamearray[index]+">"+productnamearray[index]+"</option>";
-				}
-				$("select#productnamepicker").html(selecthtml);
-				
-				$('#productnamepicker').selectpicker();
-				
-				productnamepicker_change();
-				producttypepicker_change();
-				productlocationpicker_change(); */
 			}
 	  });
 	  
@@ -205,34 +186,7 @@ $(function() {
 			    source: producttypes
 			});
 	  });
-	  
-	  
-		//以下完成checkout form的动作绑定
-		//货物名下拉列表改变事件
-		/* $('select#productnamepicker').change(function(){
-		
-			productnamepicker_change();
-			producttypepicker_change();
-			productlocationpicker_change();
-			
-		}); */
-		
-		//货物类型下拉列表改变事件
-		/* $('select#producttypepicker').change(function(){
-		
-			producttypepicker_change();
-			productlocationpicker_change();
-			
-		}); */
-		
-		//货物位置下拉列表改变事件
-		/* $('select#productlocationpicker').change(function(){
-		
-			productlocationpicker_change();
-			
-		}); */
-	
-	
+	  	
 	$("button#submit1").click(function(event) {
 		
 		var productname     = $("form[name=checkinform] input[name=productname]").val();
@@ -271,68 +225,11 @@ $(function() {
 				return;
 			},
 			success:function(json){
-				//$( "#dialog p" ).text(json.result);
-				//$( "#dialog" ).dialog( "open" );
+				
 				dialog_open(json);
-				//alert(json.result);
-				//return;
 			}
 		});
 	});
-	
-	
-/* 	$("button#submit2").click(function(event) {
-		
-		var productname     = $("form[name=checkoutform] select[name=productname]").val();
-		var producttype     = $("form[name=checkoutform] select[name=producttype]").val();
-		var productlocation = $("form[name=checkoutform] select[name=productlocation]").val();
-		
-		var checkoutamount  = $("form[name=checkoutform] input[name=checkoutamount]").val();
-		    checkoutamount  = parseInt(checkoutamount);
-		var remainamount    = $("form[name=checkoutform] label[name=remainamount]").text();
-			remainamount    = parseInt(remainamount);
-
-		if(productname.length == 0){
-			alert("请输入货物名！");
-			return;
-		}else if(producttype.length == 0){
-			alert("请输入货物型号！");
-			return;
-		}else if(productlocation.length == 0){
-			alert("请输入货物存放位置！");
-			return;
-		}else if(isNaN(checkoutamount) || checkoutamount < 0){
-			alert("出仓数量必须是数字，并且大于0");
-			return;
-		}else if(checkoutamount > remainamount){
-			alert("签出量大于库存量！");
-			return;
-		}
-		
-		var serializeArray = $("form[name=checkoutform]").serialize();
-		
-		alert("serializeArray="+serializeArray);
-		$.ajax({
-			url: "/ERPSystem/warehouse/productcheckinoutServlet",
-			data: serializeArray,
-			type: "post",
-			async: false,
-			dataType: 'json',
-			error: function(xhr, message, obj) {
-				
-		        console.log("ERR:",xhr.responseText, message, obj);	
-				alert("计算出错了，请检查参数！");
-				return;
-			},
-			success:function(json){
-				
-				alert(json.result);
-				return;
-
-			}
-		});
-	}); */
-	
 	
 });
 

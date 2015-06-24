@@ -88,7 +88,14 @@
 		for(var index in producttypearray){
 			selecthtml += "<option value="+producttypearray[index]+">"+producttypearray[index]+"</option>";
 		}
+		
+		var selectedindex = $("select#producttypepicker").get(0).selectedIndex;
+		//alert("produtcttypeindex="+selectedindex);
 		$("select#producttypepicker").html(selecthtml);
+		
+		if(null != selectedindex){
+			$("select#producttypepicker").get(0).selectedIndex = selectedindex;
+		}
 		
 		$('select#producttypepicker').selectpicker('refresh');//重新渲染selectpicker
 
@@ -111,7 +118,11 @@
 			}
 		}
 		
+		var selectedindex = $("select#productlocationpicker").get(0).selectedIndex;
 		$("select#productlocationpicker").html(selecthtml);
+		if(null != selectedindex){
+			$("select#productlocationpicker").get(0).selectedIndex = selectedindex;
+		}
 		
 		$('select#productlocationpicker').selectpicker('refresh');//重新渲染selectpicker
 		
@@ -133,90 +144,56 @@
 		}
 	}
 	
+	function getproductinfo(){
+		  //获取仓库的库存信息
+		  $.ajax({
+			  url: "/ERPSystem/warehouse/productbrowseServlet",
+				data:{"browsetype":"all"},
+				type: "get",
+				async: false,
+				dataType: 'json',
+				error: function(xhr, message, obj) {
+					
+			        console.log("ERR:",xhr.responseText, message, obj);	
+					alert("获取仓库信息出错了，请检查参数！");
+					return;
+				},
+				success:function(json){
+					
+					productinfo = json;
+					//以下完成checkout form的动作
+					var selecthtml = "";
+					var productnamearray = new Array();
+					for(var index in productinfo){
+						if( productnamearray.indexOf(productinfo[index].productname)==-1 ){
+							productnamearray.push(productinfo[index].productname);	
+						}
+					}
+					for(var index in productnamearray ){
+						selecthtml += "<option value="+productnamearray[index]+">"+productnamearray[index]+"</option>";
+					}
+					
+					var selectedindex = $("select#productnamepicker").get(0).selectedIndex;
+					$("select#productnamepicker").html(selecthtml);
+					
+					if(null != selectedindex){
+						$("select#productnamepicker").get(0).selectedIndex = selectedindex;
+					}
+					
+					$('#productnamepicker').selectpicker();
+					
+					productnamepicker_change();
+					producttypepicker_change();
+					productlocationpicker_change();
+				}
+		  });
+	}
+	
 	
 $(function() {
-
-	  //获取仓库的库存信息
-	  $.ajax({
-		  url: "/ERPSystem/warehouse/productbrowseServlet",
-			data:{"browsetype":"all"},
-			type: "get",
-			async: false,
-			dataType: 'json',
-			error: function(xhr, message, obj) {
-				
-		        console.log("ERR:",xhr.responseText, message, obj);	
-				alert("获取仓库信息出错了，请检查参数！");
-				return;
-			},
-			success:function(json){
-				
-				productinfo = json;
-				//以下完成checkin form的动作
-				
-				var productnames = new Array();
- 				for(var index in productinfo){
- 					if(productnames.indexOf(productinfo[index].productname) == -1){
- 						productnames.push(productinfo[index].productname);
- 						console.log(productinfo[index].productname);
- 					}
- 				}
-				$("input#productname").autocomplete({
-				    source: productnames
-				});
-				
-				var productlocations = new Array();
- 				for(var index in productinfo){
- 					if(productlocations.indexOf(productinfo[index].productlocation) == -1){
- 						productlocations.push(productinfo[index].productlocation);
- 						console.log(productinfo[index].productlocation);
- 					}
- 				}
- 				
-				$("input#productlocation").autocomplete({
-				    source: productlocations
-				});
-				
-				
-				//以下完成checkout form的动作
-				var selecthtml = "";
-				var productnamearray = new Array();
-				for(var index in productinfo){
-					if( productnamearray.indexOf(productinfo[index].productname)==-1 ){
-						productnamearray.push(productinfo[index].productname);	
-					}
-				}
-				for(var index in productnamearray ){
-					selecthtml += "<option value="+productnamearray[index]+">"+productnamearray[index]+"</option>";
-				}
-				$("select#productnamepicker").html(selecthtml);
-				
-				$('#productnamepicker').selectpicker();
-				
-				productnamepicker_change();
-				producttypepicker_change();
-				productlocationpicker_change();
-			}
-	  });
-	  
-	  
-		//以下完成checkin form的动作绑定
-	 /*  $('input#productname').blur(function(){
-	  		var producttypes = new Array();
-	  		var productname = $("input#productname").val();
-	  		console.log("productname="+productname);
-	  		for(var index in productinfo){
-	  			if(productinfo[index].productname == productname && producttypes.indexOf(productinfo[index].producttype)==-1){
-	  				producttypes.push(productinfo[index].producttype);
-	  			}
-	  		}
-	  		console.log(producttypes);
-	  		$("input#producttype").autocomplete({
-			    source: producttypes
-			});
-	  });
-	   */
-	  
+  
+		getproductinfo();
+	
 		//以下完成checkout form的动作绑定
 		//货物名下拉列表改变事件
 		$('select#productnamepicker').change(function(){
@@ -241,54 +218,6 @@ $(function() {
 			productlocationpicker_change();
 			
 		});
-	
-	
-/* 	$("button#submit1").click(function(event) {
-		
-		var productname     = $("form[name=checkinform] input[name=productname]").val();
-		var producttype     = $("form[name=checkinform] input[name=producttype]").val();
-		var productlocation = $("form[name=checkinform] input[name=productlocation]").val();
-		var checkinamount   = $("form[name=checkinform] input[name=checkinamount]").val();
-		    checkinamount   = parseInt(checkinamount);
-		
-		if(productname.length == 0){
-			alert("请输入货物名！");
-			return;
-		}else if(producttype.length == 0){
-			alert("请输入货物型号！");
-			return;
-		}else if(productlocation.length == 0){
-			alert("请输入货物存放位置！");
-			return;
-		}else if(isNaN(checkinamount) || checkinamount < 0){
-			alert("入仓数量必须是数字，并且大于0");
-			return;
-		}
-		
-		var serializeArray = $("form[name=checkinform]").serialize();
-		
-		alert("serializeArray="+serializeArray);
-		$.ajax({
-			url: "/ERPSystem/warehouse/productcheckinoutServlet",
-			data: serializeArray,
-			type: "post",
-			async: false,
-			dataType: 'json',
-			error: function(xhr, message, obj) {
-				
-		        console.log("ERR:",xhr.responseText, message, obj);	
-				alert("货物入仓计算出错了，请检查参数！");
-				return;
-			},
-			success:function(json){
-				
-				alert(json.result);
-				return;
-			}
-		});
-	}); */
-	
-
 	
 	
 	$("button#submit2").click(function(event) {
@@ -336,9 +265,8 @@ $(function() {
 			},
 			success:function(json){
 				
+				getproductinfo();
 				dialog_open(json);
-				
-				//return;
 
 			}
 		});

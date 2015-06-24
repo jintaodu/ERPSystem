@@ -50,7 +50,7 @@ public class employeesalaryServlet extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		
-		String employeename = request.getParameter("employeeName");
+		String employeename = request.getParameter("employeename");
 		String salaryamount = request.getParameter("salaryamount");
 		String idno         = request.getParameter("employeeidno").replace(";", "");
 		
