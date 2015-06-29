@@ -76,7 +76,7 @@
   $('#producttypepicker').selectpicker();
   $('#productlocationpicker').selectpicker();
 	
-  var productinfo = null;
+  //var productinfo = null;
   var table = $('#historytable').DataTable({
 	  "aLengthMenu": [5, 10, 20, 50, 100],
 	  "oLanguage": {		//汉化
@@ -96,7 +96,7 @@
       }
   });
   
-	function productnamepicker_change(){
+/* 	function productnamepicker_change(){
 
 		var selectedname = $("select#productnamepicker").val();
 		var selecthtml = "";
@@ -211,7 +211,7 @@
 				productlocationpicker_change();
 			}
 	  });
-}
+} */
   
   function product_transaction_render( serializeArray )
   {   //获取仓库的库存信息
@@ -238,10 +238,10 @@
   $(function(){
 	  
 	  	getproductinfo();
-		
+	  	product_select_change_interaction();
 		//以下完成checkout form的动作绑定
 		//货物名下拉列表改变事件
-		$('select#productnamepicker').change(function(){
+		/* $('select#productnamepicker').change(function(){
 		
 			productnamepicker_change();
 			producttypepicker_change();
@@ -262,7 +262,7 @@
 		
 			productlocationpicker_change();
 			
-		});
+		}); */
 		
 		$('button#search').click(function(){
 			
@@ -271,9 +271,7 @@
 			var selectedproductlocation = $('select#productlocationpicker').val();
 			
 			var serializeArray = $("form[name=historybrowseform]").serialize();
-			//console.log(serializeArray.productname);
-			alert(serializeArray);
-			//product_transaction_render(selectedprotuctname,selectedproducttype,selectedproductlocation);
+			
 			product_transaction_render( serializeArray );
 
 		});

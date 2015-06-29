@@ -90,12 +90,9 @@
 		var selectedname = $("select#productnamepicker").val();
 		
 		var selecthtml = "";
-		//alert(selectedtype);
-		//alert(selectedname);
 		var productlocationarray = new Array();
 		
 		for(var index in productinfo){
-			//alert(productinfo[index].productname+"    "+productinfo[index].producttype);
 			if( productinfo[index].productname == selectedname && productinfo[index].producttype ==  selectedtype ){
 				selecthtml += "<option value=" + productinfo[index].productlocation + ">" + productinfo[index].productlocation + "</option>";
 			}
@@ -227,6 +224,8 @@ $(function() {
 			success:function(json){
 				
 				dialog_open(json);
+				$("form[name=checkinform]")[0].reset();//清空表单
+
 			}
 		});
 	});
